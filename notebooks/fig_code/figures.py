@@ -123,7 +123,7 @@ def plot_kmeans_interactive():
     X, y = make_blobs(n_samples=300, centers=4,
                       random_state=0, cluster_std=0.60)
 
-    def _kmeans_step(frame, n_clusters):
+    def _kmeans_step(frame=0, n_clusters=4):
         rng = np.random.RandomState(2)
         labels = np.zeros(X.shape[0])
         centers = rng.randn(n_clusters, 2)
@@ -172,7 +172,7 @@ def plot_kmeans_interactive():
             plt.text(3.8, 9.5, "2. Update centroids to cluster means",
                      ha='right', va='top', size=14)
 
-    return interact(_kmeans_step, frame=[0, 50], n_clusters=[3, 5])
+    return interact(_kmeans_step, frame=[0, 50], n_clusters=[1, 6])
 
 
 def plot_image_components(x, coefficients=None, mean=0, components=None,
