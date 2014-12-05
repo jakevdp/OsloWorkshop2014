@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import warnings
 
 
 def plot_venn_diagram():
@@ -115,7 +116,7 @@ def plot_tree_interactive(X, y):
     return interact(interactive_tree, depth=[1, 5])
 
 
-def plot_kmeans_interactive():
+def plot_kmeans_interactive(min_clusters=1, max_clusters=6):
     from IPython.html.widgets import interact
     from sklearn.metrics.pairwise import euclidean_distances
     from sklearn.datasets.samples_generator import make_blobs
@@ -137,14 +138,18 @@ def plot_kmeans_interactive():
                 labels = dist.argmin(1)
 
             if i < nsteps or frame % 3 > 1:
-                centers = np.array([X[labels == j].mean(0)
-                                    for j in range(n_clusters)])
+                with warnings.catch_warnings():
+                    warnings.filterwarnings('ignore',
+                                            message='Mean of empty slice')
+                    centers = np.array([X[labels == j].mean(0)
+                                        for j in range(n_clusters)])
                 nans = np.isnan(centers)
                 centers[nans] = old_centers[nans]
 
 
-        # plot the cluster centers
-        plt.scatter(X[:, 0], X[:, 1], c=labels, s=50, cmap='rainbow');
+        # plot the data and cluster centers
+        plt.scatter(X[:, 0], X[:, 1], c=labels, s=50, cmap='rainbow',
+                    vmin=0, vmax=n_clusters - 1);
         plt.scatter(old_centers[:, 0], old_centers[:, 1], marker='o',
                     c=np.arange(n_clusters),
                     s=200, cmap='rainbow')
@@ -172,7 +177,8 @@ def plot_kmeans_interactive():
             plt.text(3.8, 9.5, "2. Update centroids to cluster means",
                      ha='right', va='top', size=14)
 
-    return interact(_kmeans_step, frame=[0, 50], n_clusters=[1, 6])
+    return interact(_kmeans_step, frame=[0, 50],
+                    n_clusters=[min_clusters, max_clusters])
 
 
 def plot_image_components(x, coefficients=None, mean=0, components=None,
