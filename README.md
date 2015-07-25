@@ -13,6 +13,5 @@ Currently the easiest cross-platform way of installing all of this is to use the
 
 ```
 $ conda update conda
-$ conda update numpy scipy matplotlib ipython-notebook pandas scikit-learn pip
-$ pip install seaborn
+$ conda update numpy scipy matplotlib ipython-notebook pandas scikit-learn seaborn pip
 ```
